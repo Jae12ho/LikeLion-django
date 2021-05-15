@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>main page</title>
+  </head>
+  <body>
+    <a href="{% url 'create_page' %}">글 작성하기</a>
+    <br /><br />
+    {% for blog in blogs %}
+    <a href="{% url 'detail' blog.id %}"><p>{{blog}}</p></a>
+    {% endfor %}
+  </body>
+</html>

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>detail page</title>
+  </head>
+  <body>
+    <p>{{title}}</p>
+    <p>{{writer}}</p>
+    <p>{{pub_date}}</p>
+    <p>{{body}}</p>
+    <a href="{% url 'update_page' id %}">수정하기</a>
+    <a href="{% url 'delete' id %}">삭제하기</a>
+  </body>
+</html>
