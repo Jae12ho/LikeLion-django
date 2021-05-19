@@ -1,0 +1,16 @@
+<html>
+  <head>
+    <title>구인구직</title>
+  </head>
+  <body>
+    <button onClick="location.href='{% url 'create_page' %}'">글작성</button>
+    {% for store in stores %}
+    <a href="{% url 'detail' store.id %}"><p>{{store}}</p></a>
+    <p>장소 : {{store.local}}</p>
+    <p>구인 지역 : {{store.enpl_area}}</p>
+    <p>급여 : {{store.salary}}원/시간</p>
+    <p>하는 일 : {{store.todo}}</p>
+    <p>지원자 수 : {{store.appl_num}}</p>
+    {% endfor %}
+  </body>
+</html>
