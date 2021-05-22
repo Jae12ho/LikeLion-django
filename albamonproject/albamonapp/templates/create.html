@@ -5,14 +5,19 @@
   </head>
   <body>
     <h1>구인글 작성</h1>
-    <form action="{% url 'create' %}" method="POST">
+    <form
+      action="{% url 'create' %}"
+      method="POST"
+      enctype="multipart/form-data"
+    >
       {%csrf_token%}
       <p>제목 : <input type="text" name="title" /></p>
       <p>장소 : <input type="text" name="local" /></p>
       <p>구인 지역 : <input type="text" name="enpl_area" /></p>
       <p>급여 : <input type="number" name="salary" /></p>
       <p>하는 일 : <input type="text" name="todo" /></p>
-      <p>세부사항 : <textarea name="detail" cols="30" rows="30"></textarea></p>
+      <p>세부내용 : <textarea name="detail" cols="30" rows="30"></textarea></p>
+      <p>사진 : <input type="file" name="image" /></p>
       <button type="submit">작성</button>
     </form>
   </body>

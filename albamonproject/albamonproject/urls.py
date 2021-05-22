@@ -18,6 +18,10 @@ from django.contrib import admin
 from django.urls import path
 from albamonapp.views import *
 
+from django.conf import settings
+from django.conf.urls.static import static
+# 장고 미디어 파일을 사용하기 위해 꼭 추가해야 하는 것들.
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home, name='home'),
@@ -29,4 +33,8 @@ urlpatterns = [
     path('delete/<int:id>', delete, name="delete"),
     path('apply/<int:id>', apply, name="apply"),
     path('cancel/<int:id>', cancel, name="cancel"),
+    path('detail/<int:id>/comments/create/', create_comment, name="create_comment"),
+    path('detail/<int:id>/comments/delete/<int:comment_id>', delete_comment, name="delete_comment"),
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

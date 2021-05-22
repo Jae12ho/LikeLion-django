@@ -1,5 +1,7 @@
+from django.core.handlers.wsgi import get_bytes_from_wsgi
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Store
+from django.utils import timezone
+from .models import Store, Comment
 
 # Create your views here.
 
@@ -12,6 +14,7 @@ def home(request):
 
 def detail(request, id):
     detail_data = get_object_or_404(Store, pk=id)
+    comments = Comment.objects.filter(store_id=id)
     context = {
         'title' : detail_data.title,
         'local' : detail_data.local,
@@ -21,6 +24,8 @@ def detail(request, id):
         'appl_num' : detail_data.appl_num,
         'detail' : detail_data.detail,
         'id' : id,
+        'comments' : comments,
+        'image' : detail_data.image,
     }
     return render(request, 'detail.html', context)
 
@@ -35,6 +40,7 @@ def create(request):
     new_data.enpl_area = request.POST['enpl_area']
     new_data.salary = request.POST['salary']
     new_data.todo = request.POST['todo']
+    new_data.image = request.FILES['image']
     new_data.save()
     return redirect('home')
 
@@ -49,6 +55,7 @@ def update_page(request, id):
         'appl_num' : update_data.appl_num,
         'detail' : update_data.detail,
         'id' : id,
+        'image' : update_data.image,
     }
     return render(request, 'update.html', context)
 
@@ -60,6 +67,7 @@ def update(request, id):
     update_data.enpl_area = request.POST['enpl_area']
     update_data.salary = request.POST['salary']
     update_data.todo = request.POST['todo']
+    update_data.image = request.FILES['image']
     update_data.save()
     return redirect('home')
 
@@ -71,9 +79,26 @@ def delete(request, id):
 def apply(request, id):
     apply_data = get_object_or_404(Store, pk=id)
     apply_data.cnt()
-    return redirect('home')
+    return redirect('detail', id)
 
 def cancel(request, id):
     apply_data = get_object_or_404(Store, pk=id)
     apply_data.dcnt()
-    return redirect('home')
+    return redirect('detail', id)
+
+def create_comment(request, id):
+    new_comment = Comment()
+    store_id = Store.objects.get(pk=id)
+    new_comment.store_id = store_id
+    new_comment.user = request.POST['user']
+    new_comment.content = request.POST['content']
+    new_comment.pub_date = timezone.now()
+    new_comment.save()
+
+    return redirect('detail', id)
+
+def delete_comment(request, id, comment_id):
+    comment = get_object_or_404(Comment, pk=comment_id)
+    comment.delete()
+
+    return redirect('detail', id)
