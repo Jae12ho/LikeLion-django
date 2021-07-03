@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=, initial-scale=1.0">
+    <title>Document</title>
+    
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=9dee735f6156b3550e77c01976bed5f9&libraries=services,clusterer,drawing"></script>
+    <style>
+        .display-none {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    에리카 카페 모음!
+    <div id="map" style="width:500px;height:400px;"></div>
+
+    <div id="name" class="display-none">
+    {% for cafe in cafes %}
+        {{cafe.name}},
+    {% endfor %}
+    </div>
+    <div id="lat" class="display-none">
+        {% for cafe in cafes %}
+            {{cafe.latitude}},
+        {% endfor %}
+    </div>
+    <div id="lng" class="display-none">
+        {% for cafe in cafes %}
+            {{cafe.longitude}},
+        {% endfor %}
+    </div>
+
+    <script>
+        var container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
+        var options = { //지도를 생성할 때 필요한 기본 옵션
+	        center: new kakao.maps.LatLng(37.301082, 126.838882), //지도의 중심좌표.
+	        level: 3 //지도의 레벨(확대, 축소 정도)
+        };
+
+        var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+
+        // id값을 통해 ,를 기준으로 나누어 추출
+        var list_name = document.getElementById("name").innerText.split(",");
+        var list_lat = document.getElementById("lat").innerText.split(",");
+        var list_lng = document.getElementById("lng").innerText.split(",");
+
+        console.log(list_name, list_lat, list_lng);
+
+        var cafeCoordinates = new Array();
+        
+        // 위도와 경도 정보를 for문을 수행하여 차례로 좌표 배열에 저장
+        for(var idx = 0; idx < list_lat.length; idx++) {
+            var latitude = list_lat[idx];
+            var longitude = list_lng[idx];
+            cafeCoordinates.push(new kakao.maps.LatLng(latitude, longitude));
+        };
+
+        console.log(latitude, longitude);
+
+        for(var idx=0; idx < cafeCoordinates.length; idx++) {
+            var marker = new kakao.maps.Marker({
+                map : map,
+                position : cafeCoordinates[idx],
+                title : list_name[idx],
+            })
+        }
+
+        // // 마커가 표시될 위치입니다 
+        // var markerPosition  = new kakao.maps.LatLng(37.301082, 126.838882); 
+
+        // // 마커를 생성합니다
+        // var marker = new kakao.maps.Marker({
+        //     position: markerPosition
+        // });
+
+        // // 마커가 지도 위에 표시되도록 설정합니다
+        // marker.setMap(map);
+
+    </script>
+</body>
+</html>
